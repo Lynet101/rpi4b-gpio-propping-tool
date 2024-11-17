@@ -5,22 +5,16 @@
 */
 
 /*
-DEVELOPERS NOTE:
-malloc user input of bytes to an array of bools, to quickly "dump" meassured data in <10cc
-`sample_data()` loop should have E_time of <= 100CC to allow for 20MHz on 2.2GHz OC RPI4b
-
-Peripheral base address: 0x7E000000
-
--t = sample_time (sample based on time instead of size)
--s = sample_size (sample based on size instead of time)
--f = sample_frequency (in KHz)
--n = sample name
--p = pin(s) (unused)
--a = acknowledge (used to acknowledge that program at sample rates >13MHz wont function correctly without OC enabled on RPI)
-
-return:
-    -1 = Invalid amount of arguments
-    -2 = abandoned by user (no oc on rpi)
+    DEVELOPERS NOTE:
+    cc = clock cycle
+    malloc user input of bytes to an array of bools, to quickly "dump" meassured data in <10cc
+    `sample_data()` loop should have E_time of <= 100CC to allow for 20MHz on 2.2GHz OC RPI4b
+    
+    Peripheral base address: 0x7E000000
+    
+    return:
+        -1 = Invalid amount of arguments
+        -2 = abandoned by user (no oc on rpi)
 */
 
 #include <complex.h>
