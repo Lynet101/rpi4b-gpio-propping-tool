@@ -6,8 +6,8 @@
 **Email:** [slindauskands@gmail.com](mailto:slindauskands@gmail.com)  
 
 ## Overview  
-The Rpi4B GPIO Propping Tool is designed to measure and dump data from the GPIO pins of a Raspberry Pi 4B.  
-This tool allows for high-frequency sampling and is optimized for performance on an overclocked Raspberry Pi 4B.  
+The Rpi4B GPIO Propping Tool is designed to measure and dump data from the GPIO pins of a RPI4B.  
+This tool allows for high-frequency sampling and is optimized for performance on an overclocked RPI4B.  
 The tool support up to 13MHz sampling on non-overclocked models, and up to 20MHz on overclocked models (running 2.2GHz)  
  
 ## Usage  
