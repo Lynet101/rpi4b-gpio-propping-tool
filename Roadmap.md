@@ -12,4 +12,4 @@
     - 10-bit ADC. bit's should be apppended to matrix as normal. Conversion to analog values should only happen in post process.
 
 ## Final goal:
-The goal of this project will be (long term) to make a framework the community can build upon to allow for osciloscope, function generators, and other essential electronics tools to get easily accessible without breaking the bank
+The goal of this project will be (long term) to make a framework the community can build upon to allow for osciloscope, function generators, and other essential electronics tools to be easily accessible by electronics enthusiasts the world over, without breaking the bank. A raspberry pi 4, and a couple of ADCs and DACs should only set you back a < 100 dollars (and even less if you already have an RPI or 2 (which many electronics enthusiasts already have)) compared to several hundred or several thousands for a "propper" one
