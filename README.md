@@ -44,12 +44,12 @@ git clone https://github.com/lynet_101/rpi4b-gpio-propping-tool.git
 2. Navigate to the project directory:
 
 ```bash
-    cd rpi4b-gpio-propping-tool
+cd rpi4b-gpio-propping-tool
 ```
 3. Compile the source code:
 
 ```bash
-    gcc -o data_proper data_proper.c -lrt -O3
+gcc -o data_proper data_proper.c -lrt -O3
 ```
 
 ## Contributing
