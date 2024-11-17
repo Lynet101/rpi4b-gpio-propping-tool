@@ -1,5 +1,6 @@
 # Project roadmap
 -----------------
+# PROJECT WILL ONLY GO BEYOND STEP 1, IF INTEREST IS SHOWN BY COMMUNITY
 ## 1
   - getting single pin readings to work at 20MHz
 ## 2
