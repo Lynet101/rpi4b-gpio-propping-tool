@@ -49,7 +49,7 @@ cd rpi4b-gpio-propping-tool
 3. Compile the source code:
 
 ```bash
-gcc -o data_proper data_proper.c -lrt -O3
+gcc -o data_propper data_prooper.c -lrt -O3
 ```
 
 ## Contributing
