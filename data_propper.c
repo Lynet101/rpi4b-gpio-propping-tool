@@ -6,25 +6,20 @@
 
 /*
     DEVELOPERS NOTE:
-    cc = clock cycle
     malloc user input of bytes to an array of bools, to quickly "dump" meassured data in <10cc
     `sample_data()` loop should have E_time of <= 100CC to allow for 20MHz on 2.2GHz OC RPI4b
-
-    Peripheral base address: 0x7E000000
-
-    return:
-        -1 = Invalid amount of arguments
-        -2 = abandoned by user (no oc on rpi)
 */
 
-#include <complex.h>
 #include <getopt.h>
+#include <complex.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-#define GPIO_BASE_ADDR 0x7E000000
+#define GPIO_BASE_ADDR_PI5 0xFE200000
+#define GPIO_BASE_ADDR_PI4 0x7E000000
+#define GPIO_BASE_ADDR_PI3 0x3F200000
 
 void sample_amount(int pin_number, int sample_freq, int sample_size, bool **data);
 void sample_over_time(int pin_number, int sample_freq, int sample_time, bool **data);
@@ -38,11 +33,12 @@ int main(int argc, char *argv[]){
     int sample_size = 0;
     int sample_time = 0;
     int pin_number = 0;
+    int generation = 0;
     char *name = NULL;
     bool oc_ack = false;
     bool **data = NULL;
 
-    while ((opt = getopt(argc, argv, "f:n:p:s:t:a")) != -1){
+    while ((opt = getopt(argc, argv, "g:f:n:p:s:t:a")) != -1){
         switch(opt) {
             case 'f':
                 sample_freq = atoi(optarg) * 1000;
@@ -62,15 +58,18 @@ int main(int argc, char *argv[]){
             case 'a':
                 oc_ack = true;
                 break;
+            case 'g':
+                generation = atoi(optarg);
+                break;
             default:
-                printf("Usage: %s -a [-t <sampling time>/-s <sampling size>] -f <sampling frequency (KHz)> -n <sample name> -p <pin number>\n", argv[0]);
+                printf("Usage: %s -a [-t <sampling time>/-s <sampling size>] -f <sampling frequency (KHz)> -n <sample name> -p <pin number> -g <pi generation>\n", argv[0]);
                 printf("note that only -t or -s should be specified, not both");
                 return -1;
         }
     }
 
-    if (name == NULL || sample_freq == 0 || (sample_time == 0 && sample_size == 0) || pin_number == 0) {
-        printf("Usage: %s -a [-t <sampling time>/-s <sampling size>] -f <sampling frequency (KHz)> -n <sample name> -p <pin number>\n", argv[0]);
+    if (name == NULL || sample_freq == 0 || (sample_time == 0 && sample_size == 0) || pin_number == 0 || generation == 0) {
+        printf("Usage: %s -a [-t <sampling time>/-s <sampling size>] -f <sampling frequency (KHz)> -n <sample name> -p <pin number> -g <pi generation>\n", argv[0]);
         printf("note that only -t or -s should be specified, not both");
         return -1;
     }
