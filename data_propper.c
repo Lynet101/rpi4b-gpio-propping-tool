@@ -23,6 +23,7 @@ return:
     -2 = abandoned by user (no oc on rpi)
 */
 
+#include <complex.h>
 #include <getopt.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -35,7 +36,7 @@ void sample_amount(int pin_number, int sample_freq, int sample_size, bool **data
 void sample_over_time(int pin_number, int sample_freq, int sample_time, bool **data);
 bool sample_data(int pin_number);
 void sleep(int sample_freq);
-void writeMatrixToFile(const char *filename, bool **data, int rows, int cols);
+void writeMatrixToFile(char *filename, bool **data, int rows, int cols);
 
 int main(int argc, char *argv[]){
     char opt;
@@ -145,7 +146,8 @@ void sleep(int sample_freq) { //this function is severely broken :shrug:
     #endif
 }
 
-void writeMatrixToFile(const char *filename, bool **data, int rows, int cols) {
+void writeMatrixToFile(char *filename, bool **data, int rows, int cols) {
+    sprintf(filename, "%s%s", filename, ".csv");
     FILE *file = fopen(filename, "w");
     if (file == NULL) {
         perror("Error opening file");
