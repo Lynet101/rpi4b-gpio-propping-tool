@@ -10,7 +10,7 @@ The Rpi4B GPIO Propping Tool is designed to measure and dump data from the GPIO 
 This tool allows for high-frequency sampling and is optimized for performance on an overclocked RPI4B.
 The tool support up to 13MHz sampling on non-overclocked models, and up to 20MHz on overclocked models (running 2.2GHz)
 
-## Usage
+## [Roadmap](link)
 
 ### Command Line Arguments
 
