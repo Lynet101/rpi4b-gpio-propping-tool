@@ -9,9 +9,9 @@
     cc = clock cycle
     malloc user input of bytes to an array of bools, to quickly "dump" meassured data in <10cc
     `sample_data()` loop should have E_time of <= 100CC to allow for 20MHz on 2.2GHz OC RPI4b
-    
+
     Peripheral base address: 0x7E000000
-    
+
     return:
         -1 = Invalid amount of arguments
         -2 = abandoned by user (no oc on rpi)
@@ -130,14 +130,10 @@ bool sample_data(int pin_number) {
 }
 
 void sleep(int sample_freq) { //this function is severely broken :shrug:
-    #ifdef _WIN32
-        Sleep(1000000/sample_freq);
-    #else
-        struct timespec ts;
-        ts.tv_sec = 0;
-        ts.tv_nsec = (1000000000/sample_freq);
-        nanosleep(&ts, NULL);
-    #endif
+    struct timespec ts;
+    ts.tv_sec = 0;
+    ts.tv_nsec = (1000000000/sample_freq);
+    nanosleep(&ts, NULL);
 }
 
 void writeMatrixToFile(char *filename, bool **data, int rows, int cols) {
