@@ -1,9 +1,9 @@
 # Rpi4B GPIO Propping Tool
 
-**Version:** [UNRELEASED]  
-**Date-of-latest-release:** 17/11/2024  
-**Author:** Sebastian Lindau-Skands  
-**Email:** [slindauskands@gmail.com](mailto:slindauskands@gmail.com)  
+**Version:** V1.0 [beta]
+**Date-of-latest-release:** 18/11/2024
+**Author:** Sebastian Lindau-Skands
+**Email:** [slindauskands@gmail.com](mailto:slindauskands@gmail.com)
 
 ## Overview
 The Rpi4B GPIO Propping Tool is designed to measure and dump data from the GPIO pins of a RPI4B.
