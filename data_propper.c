@@ -14,6 +14,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 #include <fcntl.h>
 #include <sys/mman.h>
@@ -24,78 +25,64 @@
 #define GPIO_BASE_ADDR_PI3 0x3F200000
 #define GPIO_LEN  0xB4  // Length of the GPIO memory block
 #define GPLEV0 0x34  // Offset for the GPIO Pin Level 0 register
+#define MAX_FILENAME 256
+
+typedef struct {
+    int sample_freq;
+    int sample_size;
+    int sample_time;
+    int pin_number;
+    int generation;
+    char name[MAX_FILENAME];
+    bool oc_ack;
+} SamplingConfig;
 
 void sample_amount(int generation, int pin_number, int sample_freq, int sample_size, bool **data);
 void sample_over_time(int generation, int pin_number, int sample_freq, int sample_time, bool **data);
 volatile unsigned int* mem_map();
 bool sample_data(volatile unsigned int *gpio_mm, int generation, int pin_number);
 void writeMatrixToFile(char *filename, bool **data, int rows, int cols);
+void initialize_config(SamplingConfig *config);
 
-int main(int argc, char *argv[]){
-    char opt;
-    int sample_freq = 0;
-    int sample_size = 0;
-    int sample_time = 0;
-    int pin_number = 0;
-    int generation = 0;
-    char *name = NULL;
-    bool oc_ack = false;
+void initialize_config(SamplingConfig *config) {
+    config->sample_freq = 150000;
+    config->sample_size = 15000;
+    config->sample_time = 0;
+    config->pin_number = 5;
+    config->generation = 4;
+    strncpy(config->name, "test", MAX_FILENAME-1);
+    config->oc_ack = true;
+}
+
+int main(int argc, char *argv[]) {
+    SamplingConfig config;
+    initialize_config(&config);
     bool **data = NULL;
 
-    while ((opt = getopt(argc, argv, "g:f:n:p:s:t:a")) != -1){
-        switch(opt) {
-            case 'f':
-                sample_freq = atoi(optarg) * 1000;
-                break;
-            case 'n':
-                name = optarg;
-                break;
-            case 'p':
-                pin_number = atoi(optarg);
-                break;
-            case 's':
-                sample_size = atoi(optarg);
-                break;
-            case 't':
-                sample_time = atoi(optarg);
-                break;
-            case 'a':
-                oc_ack = true;
-                break;
-            case 'g':
-                generation = atoi(optarg);
-                break;
-            default:
-                printf("Usage: %s -a [-t <sampling time>/-s <sampling size>] -f <sampling frequency (KHz)> -n <sample name> -p <pin number> -g <pi generation>\n", argv[0]);
-                printf("note that only -t or -s should be specified, not both");
-                return -1;
-        }
-    }
-
-    if (name == NULL || sample_freq == 0 || (sample_time == 0 && sample_size == 0) || pin_number == 0 || generation == 0) {
+    if (config.sample_freq == 0 || (config.sample_time == 0 && config.sample_size == 0) ||
+        config.pin_number == 0 || config.generation == 0) {
         printf("Usage: %s -a [-t <sampling time>/-s <sampling size>] -f <sampling frequency (KHz)> -n <sample name> -p <pin number> -g <pi generation>\n", argv[0]);
-        printf("note that only -t or -s should be specified, not both");
+        printf("note that only -t or -s should be specified, not both\n");
         return -1;
     }
 
-    if (sample_freq >= 13000000 && !oc_ack) {
+    if (config.sample_freq >= 13000000 && !config.oc_ack) {
         printf("A frequency above 13MHz which requires an overclocked raspberry pi running 2.2GHz. Please use the '-a' flag to acknowledge this warning, and proceed with execution");
         return -2;
     }
 
     data = malloc(sizeof(bool*));
 
-    if (sample_time != 0) {
-        sample_size = sample_freq * sample_time;
-        data[0] = malloc(sample_size * sizeof(bool));
-        sample_over_time(generation, pin_number, sample_freq, sample_time, data);
-    }
-    else {
-        data[0] = malloc(sample_size * sizeof(bool));
-        sample_amount(generation, pin_number, sample_freq, sample_size, data);
+    if (config.sample_time != 0) {
+        config.sample_size = config.sample_freq * config.sample_time;
+        data[0] = malloc(config.sample_size * sizeof(bool));
+        sample_over_time(config.generation, config.pin_number, config.sample_freq, config.sample_time, data);
+    } else {
+        data[0] = malloc(config.sample_size * sizeof(bool));
+        sample_amount(config.generation, config.pin_number, config.sample_freq, config.sample_size, data);
     }
 
-    writeMatrixToFile(name, data, 1, sample_size);
+    writeMatrixToFile(config.name, data, 1, config.sample_size);
 
     free(data[0]);
     free(data);
